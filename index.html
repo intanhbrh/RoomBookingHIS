@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HIS Room Booking System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ── RESET & BASE ───────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:      #0b1f3a;
+    --navy-mid:  #122846;
+    --navy-lite: #1a3560;
+    --gold:      #c9a84c;
+    --gold-lite: #e8c97a;
+    --cream:     #f5f0e8;
+    --white:     #ffffff;
+    --text-dim:  #8a9ab5;
+    --red:       #c0392b;
+    --green:     #1e7e53;
+    --blue-acc:  #2e7dd4;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --shadow:    0 8px 32px rgba(0,0,0,0.25);
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND TEXTURE ─────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(46,125,212,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11,31,58,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-lite));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .brand-sub {
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-btn {
+    padding: 7px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+  }
+
+  .nav-btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    border-color: transparent;
+  }
+
+  .nav-btn-ghost:hover {
+    color: var(--white);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .nav-btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  .nav-btn-gold:hover {
+    background: var(--gold-lite);
+  }
+
+  /* ── MAIN LAYOUT ────────────────────────────────── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  /* ── PAGE HERO ──────────────────────────────────── */
+  .page-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .page-hero-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 34px;
+    line-height: 1.15;
+    color: var(--white);
+  }
+
+  .page-hero-left h1 span {
+    color: var(--gold);
+  }
+
+  .page-hero-left p {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  .date-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    padding: 10px 18px;
+  }
+
+  .date-badge .day-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .date-badge .day-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .date-badge .day-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .date-badge .day-full {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── TOOLBAR ────────────────────────────────────── */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .tab-btn {
+    padding: 7px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .tab-btn:hover:not(.active) {
+    color: var(--white);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .filter-select {
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a9ab5' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  .filter-select:focus {
+    border-color: var(--gold);
+  }
+
+  .filter-select option {
+    background: var(--navy-mid);
+    color: var(--white);
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+    position: relative;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+  }
+
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-input:focus { border-color: var(--gold); }
+
+  .ml-auto { margin-left: auto; }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-lite);
+    transform: translateY(-1px);
+  }
+
+  /* ── STATS ROW ──────────────────────────────────── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: rgba(201,168,76,0.3); }
+
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.green { color: #4ade80; }
+  .stat-value.red { color: #f87171; }
+
+  .stat-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── CATEGORY SECTION ───────────────────────────── */
+  .category-section {
+    margin-bottom: 32px;
+    animation: fadeSlideUp 0.4s ease both;
+  }
+
+  .category-section:nth-child(2) { animation-delay: 0.08s; }
+  .category-section:nth-child(3) { animation-delay: 0.16s; }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .category-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-event    { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+  .dot-meeting  { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.5); }
+  .dot-timetable { background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+
+  .category-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+  }
+
+  .category-subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-left: 2px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .category-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-dim);
+    background: rgba(255,255,255,0.06);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── ROOM GRID ──────────────────────────────────── */
+  .room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .room-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .room-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .room-card.event::before    { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .room-card.meeting::before  { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+  .room-card.timetable::before{ background: linear-gradient(90deg, #10b981, #34d399); }
+
+  .room-card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(201,168,76,0.25);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .room-card:hover::before { opacity: 1; }
+
+  .room-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .room-floor-badge {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-event    { background: rgba(245,158,11,0.15);  color: #fbbf24; }
+  .badge-meeting  { background: rgba(59,130,246,0.15);  color: #60a5fa; }
+  .badge-timetable{ background: rgba(16,185,129,0.15);  color: #34d399; }
+
+  .status-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .status-available { background: rgba(16,185,129,0.15); color: #34d399; }
+  .status-booked    { background: rgba(239,68,68,0.15);  color: #f87171; }
+  .status-pending   { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .status-maint     { background: rgba(107,114,128,0.15);color: #9ca3af; }
+
+  .room-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .room-code-tag {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .room-features {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .feat-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .feat-tag svg {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+  }
+
+  .room-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .cap-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .book-btn {
+    padding: 5px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .book-btn-available {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .book-btn-available:hover {
+    background: var(--gold-lite);
+  }
+
+  .book-btn-booked {
+    background: rgba(239,68,68,0.1);
+    color: #f87171;
+    cursor: not-allowed;
+  }
+
+  /* ── MODAL OVERLAY ──────────────────────────────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7,16,32,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--navy-mid);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.25s;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  }
+
+  .modal-overlay.open .modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    padding: 24px 24px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .modal-header-left h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .modal-header-left p {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .modal-close:hover {
+    background: rgba(255,255,255,0.12);
+    color: var(--white);
+  }
+
+  .modal-body { padding: 0 24px 24px; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 7px;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: var(--text-dim);
+  }
+
+  .form-select option {
+    background: var(--navy-mid);
+    color: var(--white);
+  }
+
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a9ab5' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+    cursor: pointer;
+  }
+
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  /* Role selector */
+  .role-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .role-option {
+    position: relative;
+  }
+
+  .role-option input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .role-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: rgba(255,255,255,0.04);
+    transition: all 0.2s;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .role-label:hover {
+    border-color: rgba(201,168,76,0.3);
+    color: var(--white);
+  }
+
+  .role-option input:checked + .role-label {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.12);
+    color: var(--gold);
+  }
+
+  .role-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .modal-footer {
+    padding: 0 24px 24px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 11px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .btn-cancel:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+  }
+
+  .btn-submit {
+    flex: 2;
+    padding: 11px;
+    background: var(--gold);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .btn-submit:hover {
+    background: var(--gold-lite);
+    transform: translateY(-1px);
+  }
+
+  /* ── SUCCESS TOAST ──────────────────────────────── */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: #065f46;
+    border: 1px solid #059669;
+    color: #ecfdf5;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(60px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 340px;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ── DAY VIEW MINI CALENDAR ─────────────────────── */
+  .day-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .day-nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+
+  .day-nav-btn:hover {
+    color: var(--white);
+    background: rgba(255,255,255,0.1);
+  }
+
+  .week-strip {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .week-strip::-webkit-scrollbar { display: none; }
+
+  .week-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    min-width: 54px;
+  }
+
+  .week-day .wd-name {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .week-day .wd-num {
+    font-size: 20px;
+    font-family: 'DM Serif Display', serif;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .week-day .wd-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: transparent;
+    margin-top: 3px;
+  }
+
+  .week-day:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  .week-day.active {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .week-day.active .wd-name { color: var(--navy); }
+  .week-day.active .wd-num  { color: var(--navy); }
+
+  .week-day.has-bookings .wd-dot { background: var(--gold-lite); }
+  .week-day.active.has-bookings .wd-dot { background: var(--navy); }
+
+  /* ── LEGEND ─────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  /* ── EMPTY STATE ────────────────────────────────── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+    grid-column: 1 / -1;
+  }
+
+  .empty-state svg {
+    margin: 0 auto 12px;
+    opacity: 0.4;
+  }
+
+  /* ── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 768px) {
+    header { padding: 0 16px; }
+    main   { padding: 20px 14px 60px; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .form-row  { grid-template-columns: 1fr; }
+    .page-hero { flex-direction: column; align-items: flex-start; }
+    .page-hero-left h1 { font-size: 26px; }
+    .room-grid { grid-template-columns: 1fr; }
+    .header-nav .nav-btn-ghost { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .role-selector { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────── -->
+<header>
+  <div class="header-brand">
+    <div class="logo-mark">H</div>
+    <div class="brand-text">
+      <span class="brand-title">Help International School</span>
+      <span class="brand-sub">Room Booking System</span>
+    </div>
+  </div>
+  <div class="header-nav">
+    <button class="nav-btn nav-btn-ghost" onclick="showSection('overview')">Overview</button>
+    <button class="nav-btn nav-btn-ghost" onclick="showSection('myBookings')">My Bookings</button>
+    <button class="nav-btn nav-btn-gold" onclick="openModal()">+ New Booking</button>
+  </div>
+</header>
+
+<!-- ── TOAST ────────────────────────────────────────── -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <path d="M20 6L9 17l-5-5"/>
+  </svg>
+  <span id="toastMsg">Booking submitted successfully!</span>
+</div>
+
+<!-- ── BOOKING MODAL ────────────────────────────────── -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <h2 id="modalTitle">New Booking</h2>
+        <p id="modalSubtitle">Fill in the details below to request a room</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">x</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Role -->
+      <div class="form-group">
+        <label class="form-label">I am a</label>
+        <div class="role-selector">
+          <div class="role-option">
+            <input type="radio" name="role" id="roleTeacher" value="teacher" checked onchange="toggleRoleFields()" />
+            <label class="role-label" for="roleTeacher">
+              <span class="role-icon">T</span>
+              Teacher
+            </label>
+          </div>
+          <div class="role-option">
+            <input type="radio" name="role" id="roleStudent" value="student" onchange="toggleRoleFields()" />
+            <label class="role-label" for="roleStudent">
+              <span class="role-icon">S</span>
+              Student
+            </label>
+          </div>
+          <div class="role-option">
+            <input type="radio" name="role" id="roleParent" value="parent" onchange="toggleRoleFields()" />
+            <label class="role-label" for="roleParent">
+              <span class="role-icon">P</span>
+              Parent
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher fields -->
+      <div id="teacherFields">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="teacherName" placeholder="e.g. Mr. Ahmad Farouk" />
+        </div>
+      </div>
+
+      <!-- Student/Parent fields -->
+      <div id="studentFields" style="display:none;">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="studentName" placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Student ID</label>
+            <input type="text" class="form-input" id="studentId" placeholder="e.g. HIS2025001" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!-- Room -->
+        <div class="form-group">
+          <label class="form-label">Room / Space</label>
+          <select class="form-select" id="bookingRoom">
+            <optgroup label="-- Event Spaces --">
+              <option value="EVT-FOYER">Foyer</option>
+              <option value="EVT-L1-AMPH">L1 Amphitheater</option>
+              <option value="EVT-L1-CAGE">L1 Caged Area</option>
+              <option value="EVT-L1-FOOT">L1 Football Field</option>
+              <option value="EVT-L1-MULT">L1 Multiuse Court</option>
+              <option value="EVT-L1-SMAL">L1 Small Field</option>
+              <option value="EVT-L1-SWIM">L1 Swimming Pool</option>
+              <option value="EVT-L1-TENN">L1 Tennis Court</option>
+              <option value="EVT-L2-CORP">L2 Corporate Lounge</option>
+              <option value="EVT-L3-CHLB">L3 Carnegie Hall Left Back</option>
+              <option value="EVT-L3-CHLF">L3 Carnegie Hall Left Front</option>
+              <option value="EVT-L3-CHR">L3 Carnegie Hall Right</option>
+              <option value="EVT-L3-CS">L3 Computer Science</option>
+              <option value="EVT-L3-EAL1">L3 EAL Exam 1</option>
+              <option value="EVT-L3-EAL2">L3 EAL Exam 2</option>
+              <option value="EVT-L5-AUD">L5 Auditorium</option>
+              <option value="EVT-L5-MPH">L5 Multipurpose Hall 1</option>
+              <option value="EVT-L5-PE1">L5 PE 1</option>
+              <option value="EVT-L5-PE2">L5 PE 2</option>
+            </optgroup>
+            <optgroup label="-- Meeting Spaces --">
+              <option value="MEET-L2-DR2">L2 Discussion Room 2 (No TV)</option>
+              <option value="MEET-L2-DR3">L2 Discussion Room 3</option>
+              <option value="MEET-L2-DR4">L2 Discussion Room 4</option>
+              <option value="MEET-L2-DR5">L2 Discussion Room 5</option>
+            </optgroup>
+            <optgroup label="-- Timetabled Spaces --">
+              <option value="TT-L2-AD1">L2 AD1</option>
+              <option value="TT-L2-MAKE">L2 Maker Space</option>
+              <option value="TT-L2-DT1">L2 DT 1</option>
+              <option value="TT-L2-DT2">L2 DT 2</option>
+              <option value="TT-L2-DT3">L2 DT 3</option>
+              <option value="TT-L2-DT4">L2 DT 4</option>
+              <option value="TT-L2-MAC">L2 Mac Lab</option>
+              <option value="TT-L2-PC">L2 PC Lab</option>
+              <option value="TT-L3-GR">L3 Green Room</option>
+              <option value="TT-L3-LIB">L3 Library Study Area</option>
+              <option value="TT-L3-C7">L3 C7 Library Digital Hub</option>
+              <option value="TT-L5-CHT">L5 Cairn Hinds Theatre</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-input" id="bookingDate" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!-- Start Time -->
+        <div class="form-group">
+          <label class="form-label">Start Time</label>
+          <select class="form-select" id="startTime">
+            <option value="07:00">07:00 AM</option>
+            <option value="07:30">07:30 AM</option>
+            <option value="08:00">08:00 AM</option>
+            <option value="08:30">08:30 AM</option>
+            <option value="09:00">09:00 AM</option>
+            <option value="09:30">09:30 AM</option>
+            <option value="10:00">10:00 AM</option>
+            <option value="10:30">10:30 AM</option>
+            <option value="11:00">11:00 AM</option>
+            <option value="11:30">11:30 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="12:30">12:30 PM</option>
+            <option value="13:00">01:00 PM</option>
+            <option value="13:30">01:30 PM</option>
+            <option value="14:00">02:00 PM</option>
+            <option value="14:30">02:30 PM</option>
+            <option value="15:00">03:00 PM</option>
+            <option value="15:30">03:30 PM</option>
+            <option value="16:00">04:00 PM</option>
+            <option value="16:30">04:30 PM</option>
+            <option value="17:00">05:00 PM</option>
+          </select>
+        </div>
+
+        <!-- End Time -->
+        <div class="form-group">
+          <label class="form-label">End Time</label>
+          <select class="form-select" id="endTime">
+            <option value="07:30">07:30 AM</option>
+            <option value="08:00">08:00 AM</option>
+            <option value="08:30">08:30 AM</option>
+            <option value="09:00">09:00 AM</option>
+            <option value="09:30">09:30 AM</option>
+            <option value="10:00">10:00 AM</option>
+            <option value="10:30">10:30 AM</option>
+            <option value="11:00">11:00 AM</option>
+            <option value="11:30">11:30 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="12:30">12:30 PM</option>
+            <option value="13:00">01:00 PM</option>
+            <option value="13:30">01:30 PM</option>
+            <option value="14:00">02:00 PM</option>
+            <option value="14:30">02:30 PM</option>
+            <option value="15:00">03:00 PM</option>
+            <option value="15:30">03:30 PM</option>
+            <option value="16:00">04:00 PM</option>
+            <option value="16:30">04:30 PM</option>
+            <option value="17:00">05:00 PM</option>
+            <option value="17:30" selected>05:30 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Purpose -->
+      <div class="form-group">
+        <label class="form-label">Purpose / Event Title</label>
+        <input type="text" class="form-input" id="bookingPurpose" placeholder="e.g. Year 10 Science Practical, Drama Rehearsal..." />
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="form-label">Additional Notes (optional)</label>
+        <textarea class="form-textarea" id="bookingNotes" placeholder="Any special requirements, equipment needed, setup instructions..."></textarea>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" onclick="submitBooking()">Submit Booking Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ──────────────────────────────────────────── -->
+<main>
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="page-hero-left">
+      <h1>Room &amp; Space <span>Availability</span></h1>
+      <p>View and book rooms across all levels of Help International School</p>
+    </div>
+    <div class="date-badge" id="dateBadge">
+      <div class="day-num" id="heroDay">06</div>
+      <div class="day-info">
+        <span class="day-name" id="heroWeekday">Monday</span>
+        <span class="day-full" id="heroFullDate">April 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-label">Total Spaces</span>
+      <span class="stat-value gold">36</span>
+      <span class="stat-meta">Across 3 categories</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Available Now</span>
+      <span class="stat-value green" id="statAvailable">36</span>
+      <span class="stat-meta">Ready to book</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Booked Today</span>
+      <span class="stat-value red" id="statBooked">0</span>
+      <span class="stat-meta">Confirmed bookings</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Pending Approval</span>
+      <span class="stat-value" id="statPending">0</span>
+      <span class="stat-meta">Awaiting admin review</span>
+    </div>
+  </div>
+
+  <!-- Day Navigator -->
+  <div class="day-nav">
+    <button class="day-nav-btn" onclick="shiftWeek(-1)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="week-strip" id="weekStrip"></div>
+    <button class="day-nav-btn" onclick="shiftWeek(1)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <button class="tab-btn active" onclick="filterCat('all',this)">All (36)</button>
+      <button class="tab-btn" onclick="filterCat('event',this)">Event (19)</button>
+      <button class="tab-btn" onclick="filterCat('meeting',this)">Meeting (4)</button>
+      <button class="tab-btn" onclick="filterCat('timetable',this)">Timetabled (13)</button>
+    </div>
+    <select class="filter-select" id="floorFilter" onchange="applyFilters()">
+      <option value="all">All Levels</option>
+      <option value="Ground">Ground</option>
+      <option value="L1">Level 1</option>
+      <option value="L2">Level 2</option>
+      <option value="L3">Level 3</option>
+      <option value="L5">Level 5</option>
+    </select>
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search rooms..." oninput="applyFilters()" />
+    </div>
+    <button class="btn-primary ml-auto" onclick="openModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      New Booking
+    </button>
+  </div>
+
+  <!-- Room Sections -->
+  <div id="roomSections"></div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#4ade80;"></div>
+      Available
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#f87171;"></div>
+      Booked
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#fbbf24;"></div>
+      Pending
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#9ca3af;"></div>
+      Maintenance
+    </div>
+    <div class="legend-item" style="margin-left:auto;">
+      <div class="legend-dot" style="background:#f59e0b;"></div>
+      Event Space
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#3b82f6;"></div>
+      Meeting Space
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#10b981;"></div>
+      Timetabled Space
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const ROOMS = [
+  // EVENT SPACES
+  { code:'EVT-FOYER',   name:'Foyer',                       floor:'Ground', cat:'event',    cap:100, proj:false, ac:true,  wb:false, status:'available', notes:'Open foyer area' },
+  { code:'EVT-L1-AMPH', name:'L1 Amphitheater',             floor:'L1',     cat:'event',    cap:200, proj:true,  ac:false, wb:false, status:'available', notes:'Outdoor amphitheater' },
+  { code:'EVT-L1-CAGE', name:'L1 Caged Area',               floor:'L1',     cat:'event',    cap:50,  proj:false, ac:false, wb:false, status:'available', notes:'Covered caged court' },
+  { code:'EVT-L1-FOOT', name:'L1 Football Field',           floor:'L1',     cat:'event',    cap:300, proj:false, ac:false, wb:false, status:'available', notes:'Full size football field' },
+  { code:'EVT-L1-MULT', name:'L1 Multiuse Court',           floor:'L1',     cat:'event',    cap:150, proj:false, ac:false, wb:false, status:'available', notes:'Multi-purpose outdoor court' },
+  { code:'EVT-L1-SMAL', name:'L1 Small Field',              floor:'L1',     cat:'event',    cap:100, proj:false, ac:false, wb:false, status:'available', notes:'Small outdoor field' },
+  { code:'EVT-L1-SWIM', name:'L1 Swimming Pool',            floor:'L1',     cat:'event',    cap:80,  proj:false, ac:false, wb:false, status:'available', notes:'School swimming pool' },
+  { code:'EVT-L1-TENN', name:'L1 Tennis Court',             floor:'L1',     cat:'event',    cap:20,  proj:false, ac:false, wb:false, status:'available', notes:'Tennis court' },
+  { code:'EVT-L2-CORP', name:'L2 Corporate Lounge',         floor:'L2',     cat:'event',    cap:30,  proj:true,  ac:true,  wb:false, status:'available', notes:'Corporate lounge with AV' },
+  { code:'EVT-L3-CHLB', name:'L3 Carnegie Hall Left Back',  floor:'L3',     cat:'event',    cap:100, proj:true,  ac:true,  wb:false, status:'available', notes:'Carnegie Hall - Left Back' },
+  { code:'EVT-L3-CHLF', name:'L3 Carnegie Hall Left Front', floor:'L3',     cat:'event',    cap:100, proj:true,  ac:true,  wb:false, status:'available', notes:'Carnegie Hall - Left Front' },
+  { code:'EVT-L3-CHR',  name:'L3 Carnegie Hall Right',      floor:'L3',     cat:'event',    cap:100, proj:true,  ac:true,  wb:false, status:'available', notes:'Carnegie Hall - Right' },
+  { code:'EVT-L3-CS',   name:'L3 Computer Science',         floor:'L3',     cat:'event',    cap:35,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Computer Science room' },
+  { code:'EVT-L3-EAL1', name:'L3 EAL Exam 1',              floor:'L3',     cat:'event',    cap:30,  proj:false, ac:true,  wb:true,  status:'available', notes:'EAL exam room 1' },
+  { code:'EVT-L3-EAL2', name:'L3 EAL Exam 2',              floor:'L3',     cat:'event',    cap:30,  proj:false, ac:true,  wb:true,  status:'available', notes:'EAL exam room 2' },
+  { code:'EVT-L5-AUD',  name:'L5 Auditorium',               floor:'L5',     cat:'event',    cap:400, proj:true,  ac:true,  wb:false, status:'available', notes:'Main auditorium' },
+  { code:'EVT-L5-MPH',  name:'L5 Multipurpose Hall 1',      floor:'L5',     cat:'event',    cap:200, proj:true,  ac:true,  wb:false, status:'available', notes:'Large multipurpose hall' },
+  { code:'EVT-L5-PE1',  name:'L5 PE 1',                     floor:'L5',     cat:'event',    cap:60,  proj:false, ac:false, wb:false, status:'available', notes:'PE hall 1' },
+  { code:'EVT-L5-PE2',  name:'L5 PE 2',                     floor:'L5',     cat:'event',    cap:60,  proj:false, ac:false, wb:false, status:'available', notes:'PE hall 2' },
+  // MEETING SPACES
+  { code:'MEET-L2-DR2', name:'L2 Discussion Room 2',        floor:'L2',     cat:'meeting',  cap:10,  proj:false, ac:true,  wb:true,  status:'available', notes:'No TV' },
+  { code:'MEET-L2-DR3', name:'L2 Discussion Room 3',        floor:'L2',     cat:'meeting',  cap:10,  proj:true,  ac:true,  wb:true,  status:'available', notes:'TV screen' },
+  { code:'MEET-L2-DR4', name:'L2 Discussion Room 4',        floor:'L2',     cat:'meeting',  cap:10,  proj:true,  ac:true,  wb:true,  status:'available', notes:'TV screen' },
+  { code:'MEET-L2-DR5', name:'L2 Discussion Room 5',        floor:'L2',     cat:'meeting',  cap:10,  proj:true,  ac:true,  wb:true,  status:'available', notes:'TV screen' },
+  // TIMETABLED SPACES
+  { code:'TT-L2-AD1',   name:'L2 AD1',                      floor:'L2',     cat:'timetable',cap:30,  proj:true,  ac:true,  wb:true,  status:'available', notes:'' },
+  { code:'TT-L2-MAKE',  name:'L2 Maker Space',              floor:'L2',     cat:'timetable',cap:25,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Creative maker space' },
+  { code:'TT-L2-DT1',   name:'L2 DT 1',                     floor:'L2',     cat:'timetable',cap:28,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Design and Technology 1' },
+  { code:'TT-L2-DT2',   name:'L2 DT 2',                     floor:'L2',     cat:'timetable',cap:28,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Design and Technology 2' },
+  { code:'TT-L2-DT3',   name:'L2 DT 3',                     floor:'L2',     cat:'timetable',cap:28,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Design and Technology 3' },
+  { code:'TT-L2-DT4',   name:'L2 DT 4',                     floor:'L2',     cat:'timetable',cap:28,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Design and Technology 4' },
+  { code:'TT-L2-MAC',   name:'L2 Mac Lab',                  floor:'L2',     cat:'timetable',cap:30,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Apple Mac computer lab' },
+  { code:'TT-L2-PC',    name:'L2 PC Lab',                   floor:'L2',     cat:'timetable',cap:30,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Windows PC lab' },
+  { code:'TT-L3-GR',    name:'L3 Green Room',               floor:'L3',     cat:'timetable',cap:15,  proj:true,  ac:true,  wb:false, status:'available', notes:'Backstage prep area' },
+  { code:'TT-L3-LIB',   name:'L3 Library Study Area',       floor:'L3',     cat:'timetable',cap:40,  proj:false, ac:true,  wb:false, status:'available', notes:'Quiet study zone' },
+  { code:'TT-L3-C7',    name:'L3 C7 Library Digital Hub',   floor:'L3',     cat:'timetable',cap:20,  proj:true,  ac:true,  wb:true,  status:'available', notes:'Digital hub in library' },
+  { code:'TT-L5-CHT',   name:'L5 Cairn Hinds Theatre',      floor:'L5',     cat:'timetable',cap:180, proj:true,  ac:true,  wb:false, status:'available', notes:'Cairn Hinds Theatre (New)' },
+];
+
+// Local bookings store (simulates DB)
+let bookings = [];
+
+// ── STATE ─────────────────────────────────────────────
+let activeCat   = 'all';
+let activeFloor = 'all';
+let selectedRoomCode = null;
+let weekOffset  = 0;
+
+// ── DATE HELPERS ──────────────────────────────────────
+const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function getToday() {
+  return new Date(2026, 3, 6); // April 6, 2026
+}
+
+let selectedDate = getToday();
+
+function formatDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function updateHero() {
+  document.getElementById('heroDay').textContent     = String(selectedDate.getDate()).padStart(2,'0');
+  document.getElementById('heroWeekday').textContent = DAYS[selectedDate.getDay()].toUpperCase();
+  document.getElementById('heroFullDate').textContent = MONTHS[selectedDate.getMonth()] + ' ' + selectedDate.getFullYear();
+}
+
+// ── WEEK STRIP ────────────────────────────────────────
+function buildWeekStrip() {
+  const strip = document.getElementById('weekStrip');
+  strip.innerHTML = '';
+  const today = getToday();
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + weekOffset * 7 + i);
+
+    const isSel = formatDate(d) === formatDate(selectedDate);
+    const hasBook = bookings.some(b => b.date === formatDate(d));
+
+    const btn = document.createElement('div');
+    btn.className = 'week-day' + (isSel ? ' active' : '') + (hasBook ? ' has-bookings' : '');
+    btn.innerHTML = `
+      <span class="wd-name">${DAYS[d.getDay()]}</span>
+      <span class="wd-num">${d.getDate()}</span>
+      <span class="wd-dot"></span>
+    `;
+    btn.onclick = () => {
+      selectedDate = new Date(d);
+      updateHero();
+      buildWeekStrip();
+      renderRooms();
+    };
+    strip.appendChild(btn);
+  }
+}
+
+function shiftWeek(dir) {
+  weekOffset += dir;
+  buildWeekStrip();
+}
+
+// ── RENDER ROOMS ──────────────────────────────────────
+function getRoomStatus(room) {
+  const dateStr = formatDate(selectedDate);
+  const booked  = bookings.find(b => b.roomCode === room.code && b.date === dateStr && b.status !== 'cancelled');
+  if (booked) return booked.status === 'pending' ? 'pending' : 'booked';
+  return room.status;
+}
+
+function renderRooms() {
+  const search  = document.getElementById('searchInput').value.toLowerCase();
+  const section = document.getElementById('roomSections');
+  section.innerHTML = '';
+
+  const cats = activeCat === 'all'
+    ? [
+        { key:'event',    label:'Event Spaces',      sub:'7:00 AM - 5:30 PM', dot:'dot-event' },
+        { key:'meeting',  label:'Meeting Spaces',     sub:'7:00 AM - 5:30 PM', dot:'dot-meeting' },
+        { key:'timetable',label:'Timetabled Spaces',  sub:'7:00 AM - 5:30 PM', dot:'dot-timetable' },
+      ]
+    : [
+        activeCat === 'event'     ? { key:'event',    label:'Event Spaces',     sub:'7:00 AM - 5:30 PM', dot:'dot-event' }    : null,
+        activeCat === 'meeting'   ? { key:'meeting',  label:'Meeting Spaces',   sub:'7:00 AM - 5:30 PM', dot:'dot-meeting' }  : null,
+        activeCat === 'timetable' ? { key:'timetable',label:'Timetabled Spaces',sub:'7:00 AM - 5:30 PM', dot:'dot-timetable'}: null,
+      ].filter(Boolean);
+
+  cats.forEach(cat => {
+    let rooms = ROOMS.filter(r => r.cat === cat.key);
+    if (activeFloor !== 'all') rooms = rooms.filter(r => r.floor === activeFloor);
+    if (search) rooms = rooms.filter(r =>
+      r.name.toLowerCase().includes(search) ||
+      r.code.toLowerCase().includes(search) ||
+      r.notes.toLowerCase().includes(search)
+    );
+    if (rooms.length === 0) return;
+
+    const sec = document.createElement('div');
+    sec.className = 'category-section';
+    sec.innerHTML = `
+      <div class="category-header">
+        <span class="category-dot ${cat.dot}"></span>
+        <span class="category-title">${cat.label}</span>
+        <span class="category-subtitle">${cat.sub}</span>
+        <span class="category-count">${rooms.length} space${rooms.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="room-grid" id="grid-${cat.key}"></div>
+    `;
+    section.appendChild(sec);
+
+    const grid = sec.querySelector(`#grid-${cat.key}`);
+    rooms.forEach(room => {
+      const st = getRoomStatus(room);
+      const card = document.createElement('div');
+      card.className = `room-card ${cat.key}`;
+
+      const badgeCls = { event:'badge-event', meeting:'badge-meeting', timetable:'badge-timetable' }[cat.key];
+      const statusCls = { available:'status-available', booked:'status-booked', pending:'status-pending', maintenance:'status-maint' }[st] || 'status-available';
+      const statusLbl = { available:'Available', booked:'Booked', pending:'Pending', maintenance:'Maintenance' }[st] || 'Available';
+
+      const feats = [];
+      if (room.proj) feats.push(`<span class="feat-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M12 7V3M8 3h8"/></svg>Projector</span>`);
+      if (room.ac)   feats.push(`<span class="feat-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/><path d="M12 12v.01"/></svg>AC</span>`);
+      if (room.wb)   feats.push(`<span class="feat-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Whiteboard</span>`);
+      if (room.notes && room.notes.toLowerCase().includes('no tv'))
+        feats.push(`<span class="feat-tag" style="color:#f87171;background:rgba(248,113,113,0.08);">No TV</span>`);
+
+      const isAvail = st === 'available';
+      card.innerHTML = `
+        <div class="room-card-head">
+          <span class="room-floor-badge ${badgeCls}">${room.floor}</span>
+          <span class="status-pill ${statusCls}">${statusLbl}</span>
+        </div>
+        <div class="room-name">${room.name}</div>
+        <div class="room-code-tag">${room.code}</div>
+        ${feats.length ? `<div class="room-features">${feats.join('')}</div>` : ''}
+        <div class="room-footer">
+          <div class="cap-info">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Cap. ${room.cap}
+          </div>
+          <button class="${isAvail ? 'book-btn book-btn-available' : 'book-btn book-btn-booked'}"
+            ${isAvail ? `onclick="openModalFor('${room.code}')"` : 'disabled'}>
+            ${isAvail ? 'Book' : st === 'pending' ? 'Pending' : 'Booked'}
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  });
+
+  // Update stats
+  const dateStr   = formatDate(selectedDate);
+  const bookedCnt = bookings.filter(b => b.date === dateStr && b.status === 'approved').length;
+  const pendCnt   = bookings.filter(b => b.date === dateStr && b.status === 'pending').length;
+  document.getElementById('statBooked').textContent   = bookedCnt;
+  document.getElementById('statPending').textContent  = pendCnt;
+  document.getElementById('statAvailable').textContent = 36 - bookedCnt - pendCnt;
+}
+
+// ── FILTER ────────────────────────────────────────────
+function filterCat(cat, btn) {
+  activeCat = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRooms();
+}
+
+function applyFilters() {
+  activeFloor = document.getElementById('floorFilter').value;
+  renderRooms();
+}
+
+// ── MODAL ─────────────────────────────────────────────
+function openModal() {
+  selectedRoomCode = null;
+  document.getElementById('modalTitle').textContent    = 'New Booking';
+  document.getElementById('modalSubtitle').textContent = 'Fill in the details below to request a room';
+  document.getElementById('bookingDate').value = formatDate(selectedDate);
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function openModalFor(code) {
+  selectedRoomCode = code;
+  const room = ROOMS.find(r => r.code === code);
+  document.getElementById('modalTitle').textContent    = 'Book: ' + room.name;
+  document.getElementById('modalSubtitle').textContent = room.code + '  |  Capacity: ' + room.cap;
+  document.getElementById('bookingRoom').value = code;
+  document.getElementById('bookingDate').value = formatDate(selectedDate);
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function toggleRoleFields() {
+  const role = document.querySelector('input[name="role"]:checked').value;
+  document.getElementById('teacherFields').style.display = (role === 'teacher') ? '' : 'none';
+  document.getElementById('studentFields').style.display = (role !== 'teacher') ? '' : 'none';
+}
+
+// ── SUBMIT ────────────────────────────────────────────
+function submitBooking() {
+  const role    = document.querySelector('input[name="role"]:checked').value;
+  const room    = document.getElementById('bookingRoom').value;
+  const date    = document.getElementById('bookingDate').value;
+  const start   = document.getElementById('startTime').value;
+  const end     = document.getElementById('endTime').value;
+  const purpose = document.getElementById('bookingPurpose').value.trim();
+
+  let name = '';
+  if (role === 'teacher') {
+    name = document.getElementById('teacherName').value.trim();
+  } else {
+    name = document.getElementById('studentName').value.trim();
+    const sid = document.getElementById('studentId').value.trim();
+    if (!sid) { alert('Please enter your Student ID.'); return; }
+  }
+
+  if (!name)    { alert('Please enter your name.'); return; }
+  if (!date)    { alert('Please select a date.'); return; }
+  if (!purpose) { alert('Please enter a purpose or event title.'); return; }
+  if (start >= end) { alert('End time must be after start time.'); return; }
+
+  // Check conflict
+  const conflict = bookings.find(b =>
+    b.roomCode === room && b.date === date &&
+    b.status !== 'cancelled' &&
+    !(end <= b.start || start >= b.end)
+  );
+
+  if (conflict) {
+    alert('This room is already booked for the selected time slot. Please choose a different time.');
+    return;
+  }
+
+  bookings.push({ roomCode: room, date, start, end, name, role, purpose, status: 'pending' });
+  closeModal();
+  buildWeekStrip();
+  renderRooms();
+  showToast('Booking request submitted! Awaiting admin approval.');
+
+  // Reset form
+  document.getElementById('teacherName').value    = '';
+  document.getElementById('studentName').value    = '';
+  document.getElementById('studentId').value      = '';
+  document.getElementById('bookingPurpose').value = '';
+  document.getElementById('bookingNotes').value   = '';
+}
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── SECTION SWITCHER ──────────────────────────────────
+function showSection(name) {
+  // Placeholder - full routing handled by PHP in real app
+  if (name === 'myBookings') showToast('My Bookings panel coming in the next build!');
+}
+
+// ── INIT ──────────────────────────────────────────────
+(function init() {
+  // Set today's date as default on date input
+  document.getElementById('bookingDate').value = formatDate(selectedDate);
+
+  updateHero();
+  buildWeekStrip();
+  renderRooms();
+})();
+</script>
+</body>
+</html>
