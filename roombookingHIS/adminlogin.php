@@ -112,7 +112,7 @@ if (isset($_GET['error'])) {
   </div>
 
   <h2>Admin Login</h2>
-  <p class="sub">Restricted access — authorised personnel only</p>
+
 
   <?php if ($error): ?>
   <div class="error-box">🚫 <?= htmlspecialchars($error) ?></div>
