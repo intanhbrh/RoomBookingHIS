@@ -1,5 +1,6 @@
 <?php
 // admin/admin_sidebar.php
+
 $open_tickets    = $conn->query("SELECT COUNT(*) FROM tickets WHERE status='Open'")->fetch_row()[0] ?? 0;
 $pending_transfer= $conn->query("SELECT COUNT(*) FROM transfer_requests WHERE status='pending'")->fetch_row()[0] ?? 0;
 $current = basename($_SERVER['PHP_SELF']);
