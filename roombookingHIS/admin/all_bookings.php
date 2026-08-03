@@ -11,6 +11,7 @@ if (isset($_GET['cancel'])) {
     header("Location: all_bookings.php?success=cancelled"); exit();
 }
 
+
 $success = $_GET['success'] ?? '';
 
 // Filters
