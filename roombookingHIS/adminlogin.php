@@ -7,7 +7,6 @@ $error = '';
 if (isset($_GET['error'])) {
     $error = $_GET['error'] === 'invalid' ? 'Invalid admin credentials. Please try again.' : 'Access denied.';
 }
-    
 ?>
 <!DOCTYPE html>
 <html lang="en">
