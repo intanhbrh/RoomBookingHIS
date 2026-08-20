@@ -4,7 +4,7 @@
 $open_tickets    = $conn->query("SELECT COUNT(*) FROM tickets WHERE status='Open'")->fetch_row()[0] ?? 0;
 $pending_transfer= $conn->query("SELECT COUNT(*) FROM transfer_requests WHERE status='pending'")->fetch_row()[0] ?? 0;
 $current = basename($_SERVER['PHP_SELF']);
-?>
+?> 
 <aside class="sidebar" style="background:#111;">
   <div class="sidebar-brand">
     <div class="brand-logo"><span>HIS</span></div>
